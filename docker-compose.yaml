@@ -1,7 +1,7 @@
 version: '3.7'
 
 networks:
-  bookie:
+  news:
 
 services:
   mysql:
@@ -15,35 +15,28 @@ services:
     volumes:
       - ./docker/mysql:/var/lib/mysql
     networks:
-      - bookie
+      - news
     ports:
       - "3308:3306"
 
-  # redis:
-  #   image: redis/redis-stack-server:latest
-  #   ports:
-  #     - "6379:6379"
-  #   stdin_open: true
-  #   tty: true
-
-  # app:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - ./:/app
-  #   environment:
-  #     NODE_ENV: development
-  #     DB_HOST: mysql
-  #     DB_USERNAME: ${DB_USERNAME}
-  #     DB_PASSWORD: ${DB_PASSWORD}
-  #     DB_DATABASE: ${DB_DATABASE}
-  #   depends_on:
-  #     - mysql
-  #   command: yarn dev
-  #   ports:
-  #     - "3310:3000"
-  #   networks:
-  #     - bookie
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/app
+    environment:
+      NODE_ENV: development
+      DB_HOST: mysql
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+    depends_on:
+      - mysql
+    command: yarn dev
+    ports:
+      - "3310:3000"
+    networks:
+      - news
 volumes:
   mysql:
