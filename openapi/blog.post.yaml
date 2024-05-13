@@ -1,0 +1,215 @@
+swagger: "3.0.3"
+info:
+  version: "1.0.0"
+  title: "API Documentation"
+  description: "This is a sample API documentation using Swagger"
+basePath: "/api"
+schemes:
+  - "http"
+paths:
+  /posts/create:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Blog Post
+      summary: "Create new Blog"
+      description: "End point Create new Blog"
+      parameters:
+        - name: "Blog"
+          in: "body"
+          description: "Blog object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/BlogRequest"
+      responses:
+        "200":
+          description: "Tạo mới thành công"
+        "409":
+          description: "Bài viết đã tồn tại trong hệ thống"
+        "400":
+          description: "Bad request, invalid input"
+  
+  /posts/update/{id}:
+    patch:
+      tags:
+        - Blog Post
+      summary: "Update blog"
+      description: "End point update new blog"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "blog object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/BlogRequest"
+        - name: "Blog"
+          in: "body"
+          description: "Blog object that needs to be update"
+          required: true
+          schema:
+            $ref: "#/definitions/BlogRequest"
+      responses:
+        '200':
+          description: "Cập nhật thành công"
+        '400':
+          description: "Bad request, invalid input"
+
+
+  /posts/update/:
+    patch:
+      tags:
+        - Blog Post
+      summary: "Update status blog"
+      description: "End point update new sattus blog"
+      parameters:
+        - name: "id"
+          in: "body"
+          description: "blog object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/StatusBlogRequest"
+      responses:
+        '200':
+          description: "Cập nhật thành công"
+        '400':
+          description: "Bad request, invalid input"
+
+  /posts/get-posts:
+    post:
+      tags:
+        - Blog Post
+      summary: "Get all blog"
+      description: "End point Get all blog"
+      parameters:
+        - name: "Blog"
+          in: "body"
+          description: "Get all blog post"
+          required: true
+          schema:
+            $ref: "#/definitions/GetBlogRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/BlogRequest"
+        '404':
+          description: "Blog not found" 
+
+  /posts/{id}:
+    get:
+      tags:
+        - Blog Post
+      summary: "Get blog by ID"
+      description: "End point Get blog by ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the blog to get"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/BlogRequest"
+        '404':
+          description: "Blog not found"
+
+  /posts/delete/{id}:
+    delete:
+      tags:
+        - Blog Post
+      summary: "Delete blog"
+      description: "End point Delete blog"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the blog to delete"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "Đã xóa thành công"
+        '404':
+          description: "Không tìm thấy"
+
+definitions:
+  BlogRequest:
+    type: object
+    required:
+      - title
+      - content
+      - viewCount
+      - categoryId
+      - userId
+      - imgUrl
+      - status
+    properties:
+      title:
+        type: string
+      content:
+        type: string
+      viewCount: 
+        type: number
+      categoryId:
+        type: number
+      userId:
+        type: number
+      imgUrl:
+        type: string
+      status:
+        type: string
+        enum:
+          - "draft"
+          - "pending"
+          - "published"
+          - "trash"
+  GetBlogRequest:
+      type: object
+      required:
+        - isAll
+        - pageSize
+        - pageNumber
+        - title
+        - startDate
+        - endDate
+      properties:
+        isAll:
+          type: boolean
+        pageNumber:
+          type: number
+        pageSize:
+          type: number
+        title:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+  StatusBlogRequest:
+      type: object
+      required:
+        - arrayId
+        - status
+      properties:
+        arrayId:
+          type: array
+          items:
+            type: number
+        status:
+          type: string
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: Enter your bearer token in the format 'Bearer {token}'

@@ -1,0 +1,143 @@
+swagger: "3.0.3"
+info:
+  version: "1.0.0"
+  title: "API Documentation"
+  description: "This is a sample API documentation using Swagger"
+basePath: "/api"
+schemes:
+  - "http"
+paths:
+  /social-account/create:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Social Account
+      summary: "Create new Account"
+      description: "End point Create new account"
+      parameters:
+        - name: "Account"
+          in: "body"
+          description: "Account object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/SocialAccountRequest"
+      responses:
+        "200":
+          description: "Tạo mới thành công"
+        "409":
+          description: "Account đã tồn tại trong hệ thống"
+        "400":
+          description: "Bad request, invalid input"
+
+  /social-account/update/{id}:
+    patch:
+      tags:
+        - Social Account
+      summary: "Update Account"
+      description: "End point update new Account"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Account object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/SocialAccountRequest"
+        - name: "Account update"
+          in: "body"
+          description: "Account object needs update"
+          required: true
+          schema:
+            $ref: "#/definitions/SocialAccountRequest"
+      responses:
+        '200':
+          description: "Cập nhật thành công"
+        '400':
+          description: "Bad request, invalid input"
+
+  /social-account/:
+    get:
+      tags:
+        - Social Account
+      summary: "Get all Account"
+      description: "End point Get all Account"
+      parameters:
+        - name: "Social Account"
+          description: "Get all Social Account"
+          required: true
+          schema:
+            $ref: "#/definitions/SocialAccountRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/SocialAccountRequest"
+        '400':
+          description: "Not found"
+
+  /social-account/{id}:
+    get:
+      tags:
+        - Social Account
+      summary: "Get Account by ID"
+      description: "End point Get Account by ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the Account to get"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/SocialAccountRequest"
+        '404':
+          description: "Account not found"
+
+  /social-account/delete/{id}:
+    delete:
+      tags:
+        - Social Account
+      summary: "Delete Account"
+      description: "End point Delete Account"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the Account to delete"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "Đã xóa thành công"
+        '404':
+          description: "Không tìm thấy"
+
+definitions:
+  SocialAccountRequest:
+    type: object
+    required:
+      - platfrom
+      - providerId
+      - userId
+    properties:
+      platfrom:
+        type: string
+      providerId:
+        type: string
+      userId:
+        type: string
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: Enter your bearer token in the format 'Bearer {token}'

@@ -1,0 +1,138 @@
+swagger: "3.0.3"
+info:
+  version: "1.0.0"
+  title: "API Documentation"
+  description: "This is a sample API documentation using Swagger"
+basePath: "/api"
+schemes:
+  - "http"
+paths:
+  /page/create:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Page
+      summary: "Create new Page"
+      description: "End point Create new Page"
+      parameters:
+        - name: "Page"
+          in: "body"
+          description: "Page object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/PageRequest"
+      responses:
+        "200":
+          description: "Tạo mới thành công"
+        "409":
+          description: "Page đã tồn tại trong hệ thống"
+        "400":
+          description: "Bad request, invalid input"
+
+  /page/update/{id}:
+    patch:
+      tags:
+        - Page
+      summary: "Update Page"
+      description: "End point update new Page"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Page object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/PageRequest"
+        - name: "page update"
+          in: "body"
+          description: "Page object needs update"
+          required: true
+          schema:
+            $ref: "#/definitions/PageRequest"
+      responses:
+        "200":
+          description: "Cập nhật thành công"
+        "400":
+          description: "Bad request, invalid input"
+
+  /page/:
+    get:
+      tags:
+        - Page
+      summary: "Get all Page"
+      description: "End point Get all Page"
+      parameters:
+        - name: "page"
+          description: "Get all Page"
+          required: true
+          schema:
+            $ref: "#/definitions/PageRequest"
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/PageRequest"
+        '400':
+          description: "Not found"
+
+  /page/{id}:
+    get:
+      tags:
+        - Page
+      summary: "Get Page by ID"
+      description: "End point Get Page by ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the Page to get"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/PageRequest"
+        "404":
+          description: "Page not found"
+
+  /page/delete/{id}:
+    delete:
+      tags:
+        - Page
+      summary: "Delete Page"
+      description: "End point Delete Page"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the Page to delete"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "Đã xóa thành công"
+        "404":
+          description: "Không tìm thấy"
+
+definitions:
+  PageRequest:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: Enter your bearer token in the format 'Bearer {token}'

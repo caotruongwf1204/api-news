@@ -1,0 +1,133 @@
+swagger: "3.0.3"
+info:
+  version: "1.0.0"
+  title: "API Documentation"
+  description: "This is a sample API documentation using Swagger"
+basePath: "/api"
+schemes:
+  - "http"
+paths:
+  /category/create:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - categories
+      summary: "Create new category"
+      description: "End point Create new category"
+      parameters:
+        - name: "category"
+          in: "body"
+          description: "Category object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/CategoryRequest"
+      responses:
+        '200':
+          description: Tạo mới thành công
+        '409':
+          description: Danh mục đã tồn tại trong hệ thống
+        '400':
+          description: Bad request, invalid input
+  /category/update/{id}:
+    patch:
+      tags:
+        - categories
+      summary: "Update category"
+      description: "End point Create new category"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Category object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/CategoryRequest"
+        - name: "category"
+          in: "body"
+          description: "Category object needs update"
+          required: true
+          schema:
+            $ref: "#/definitions/CategoryRequest"
+      responses:
+        '200':
+          description: Cập nhật thành công
+        '400':
+          description: Bad request, invalid input
+  /category/:
+    get:
+      tags:
+        - categories
+      summary: "Get all categories"
+      description: "End point Get all categories"
+      parameters:
+        - name: "category"
+          # in: "body"
+          description: "Get all category"
+          required: false
+          schema:
+            $ref: "#/definitions/CategoryRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/CategoryRequest"
+        '400':
+          description: "not found"
+  /category/{id}:
+    get:
+      tags:
+        - categories
+      summary: "Get category by ID"
+      description: "End point Get category by ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the category to get"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/CategoryRequest"
+        '404':
+          description: "Category not found"
+  /category/delete/{id}:
+    delete:
+      tags:
+        - categories
+      summary: "Delete category"
+      description: "End point Delete category"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the category to delete"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "Đã xóa danh mục thành công"
+        '404':
+          description: "Không tìm thấy danh mục"
+definitions:
+  CategoryRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: Enter your bearer token in the format 'Bearer {token}'

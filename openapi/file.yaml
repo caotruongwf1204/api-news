@@ -1,0 +1,342 @@
+swagger: "3.0.3"
+info:
+  version: "1.0.0"
+  title: "API Documentation"
+  description: "This is a sample API documentation using Swagger"
+basePath: "/api"
+schemes:
+  - "http"
+paths:
+  /file/upload:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - File
+      summary: "Upload File"
+      description: "End point Upload File"
+      parameters:
+        - name: "File"
+          in: formData
+          type: file
+        - name: "File"
+          in: "body"
+          description: "nhập folderId"
+          required: true
+          schema:
+            $ref: "#/definitions/FileRequest"
+      responses:
+        "200":
+          description: "Tạo mới thành công"
+        "400":
+          description: "Bad request, invalid input"
+  /file/update/{id}:
+    patch:
+      tags:
+        - File
+      summary: "Update File"
+      description: "End point update new FIle"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "File object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateFileRequest"
+        - name: "File"
+          in: "body"
+          description: "File object that needs to be update"
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateFileRequest"
+      responses:
+        "200":
+          description: "Cập nhật thành công"
+        "400":
+          description: "Bad request, invalid input"
+  /file/delete:
+    delete:
+      tags:
+        - File
+      summary: "Delete File"
+      description: "End point Delete File"
+      parameters:
+        - name: "[id]"
+          in: "body"
+          description: "ID of the file to delete"
+          required: true
+          schema:
+            $ref: "#/definitions/FileDeleteRequest"
+      responses:
+        "200":
+          description: "Đã xóa thành công"
+        "404":
+          description: "Không tìm thấy"
+  /file/get-files:
+    post:
+      tags:
+        - File
+      summary: "Get all file"
+      description: "End point Get all file"
+      parameters:
+        - name: "File"
+          in: "body"
+          description: "Get all file"
+          required: true
+          schema:
+            $ref: "#/definitions/GetFileRequest"
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/GetFileRequest"
+        "404":
+          description: "File not found"
+  /file/folder:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Folder
+      summary: "Create new Folder"
+      description: "End point Create new Folder"
+      parameters:
+        - name: "Folder"
+          in: "body"
+          description: "Folder object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/FolderRequest"
+      responses:
+        "200":
+          description: "Tạo mới thành công"
+        "400":
+          description: "Bad request, invalid input"
+  /file/folder?parent={id}:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Folder
+      summary: "Tạo mới folder con"
+      description: "End point Create new folder"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id folder cha"
+          required: true
+          schema:
+            $ref: "#/definitions/FolderRequest"
+        - name: "folder"
+          in: "body"
+          description: "Folder object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/FolderRequest"
+  /file/folder/{id}:
+    patch:
+      tags:
+        - Folder
+      summary: "Update Folder"
+      description: "End point update new Folder"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Folder object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/FolderRequest"
+        - name: "Folder"
+          in: "body"
+          description: "Folder object that needs to be update"
+          required: true
+          schema:
+            $ref: "#/definitions/FolderRequest"
+      responses:
+        "200":
+          description: "Cập nhật thành công"
+        "400":
+          description: "Bad request, invalid input"
+  file/folder/{id}:
+    get:
+      tags:
+        - Folder
+      summary: "Get Folder by id"
+      description: "End point Delete Folder"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the Folder to get"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "Đã xóa thành công"
+        "404":
+          description: "Không tìm thấy"
+  /file/folder/get-folders:
+    post:
+      tags:
+        - Folder
+      summary: "Get all Folder"
+      description: "End point Get all Folder"
+      parameters:
+        - name: "Folder"
+          in: "body"
+          description: "Get all Folder"
+          required: true
+          schema:
+            $ref: "#/definitions/GetFolderRequest"
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/FolderRequest"
+        "404":
+          description: "Folder not found"
+  /file/folder/delete:
+    delete:
+      tags:
+        - Folder
+      summary: "Delete Folder"
+      description: "End point Delete Folder"
+      parameters:
+        - name: "[id]"
+          in: "body"
+          description: "ID of the file to delete"
+          required: true
+          schema:
+            $ref: "#/definitions/FileDeleteRequest"
+      responses:
+        "200":
+          description: "Đã xóa thành công"
+        "404":
+          description: "Không tìm thấy"
+  /email/send-email:
+    post:
+      tags:
+        - Mail
+      summary: "Send mail"
+      description: "End point send maill"
+      parameters:
+        - name: "Mail"
+          in: "body"
+          description: "Send mail"
+          required: true
+          schema:
+            $ref: "#/definitions/MailRequest"
+      responses:
+        "200":
+          description: "Email sent successfully"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/MailRequest"
+        "404":
+          description: "Error occurred while sending email"
+definitions:
+  FileRequest:
+    type: object
+    required:
+      - file
+      - folderId
+    properties:
+      file:
+        type: file
+      folderId:
+        type: number
+  FileDeleteRequest:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: array
+        items:
+          type: number
+  GetFileRequest:
+    type: object
+    required:
+      - isAll
+      - pageSize
+      - pageNumber
+    properties:
+      isAll:
+        type: boolean
+      pageNumber:
+        type: number
+      pageSize:
+        type: number
+  FolderRequest:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+  GetFolderRequest:
+    type: object
+    required:
+      - isAll
+      - pageSize
+      - pageNumber
+    properties:
+      isAll:
+        type: boolean
+      pageNumber:
+        type: number
+      pageSize:
+        type: number
+  UpdateFileRequest:
+    type: object
+    required:
+      - filename
+    properties:
+      filename:
+        type: string
+  MailRequest:
+    type: "object"
+    properties:
+      subject:
+        type: "string"
+      text:
+        type: "object"
+        properties:
+          "First name":
+            type: "string"
+          "Last name":
+            type: "string"
+          "Date of birth":
+            type: "string"
+          Gender:
+            type: "string"
+          City:
+            type: "string"
+          Nationality:
+            type: "string"
+          Email:
+            type: "string"
+          Phone:
+            type: "number"
+          "Profile link":
+            type: "string"
+      attachments:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            filename:
+              type: "string"
+            path:
+              type: "string"

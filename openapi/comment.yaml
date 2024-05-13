@@ -1,0 +1,197 @@
+swagger: "3.0.3"
+info:
+  version: "1.0.0"
+  title: "API Documentation"
+  description: "This is a sample API documentation using Swagger"
+basePath: "/api"
+schemes:
+  - "http"
+paths:
+  /comment/create:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - comment
+      summary: "Create new comment"
+      description: "End point Create new comment"
+      parameters:
+        - name: "comment"
+          in: "body"
+          description: "Comment object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/CommentRequest"
+      responses:
+        '200':
+          description: Tạo mới thành công
+        '409':
+          description: Đã tồn tại trong hệ thống
+        '400':
+          description: Bad request, invalid input
+  /comment/create?parent={id}:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - comment
+      summary: "Trả lời comment"
+      description: "End point Create new comment"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id comment cha"
+          required: true
+          schema:
+            $ref: "#/definitions/CommentRequest"
+        - name: "comment"
+          in: "body"
+          description: "Comment object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/CommentRequest"
+      responses:
+        '200':
+          description: Tạo mới thành công
+        '409':
+          description: Đã tồn tại trong hệ thống
+        '400':
+          description: Bad request, invalid input
+  /comment/update/{id}:
+    patch:
+      tags:
+        - comment
+      summary: "Update comment"
+      description: "End point Create new comment"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Comment object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/CommentRequest"
+        - name: "comment update"
+          in: "body"
+          description: "Comment object needs update"
+          required: true
+          schema:
+            $ref: "#/definitions/CommentRequest"
+      responses:
+        '200':
+          description: Cập nhật thành công
+        '400':
+          description: Bad request, invalid input
+  /comment/:
+    post:
+      tags:
+        - comment
+      summary: "Get all comment"
+      description: "End point Get all comment"
+      parameters:
+        - name: "comment"
+          in: "body"
+          description: "Comment object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/GetCommentRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/GetCommentRequest"
+        '400':
+          description: "Not found"
+  /comment/{id}:
+    get:
+      tags:
+        - comment
+      summary: "Get comment by ID"
+      description: "End point Get comment by ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the comment to get"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/CommentRequest"
+        '404':
+          description: "Comment not found"
+  /comment/delete/{id}:
+    delete:
+      tags:
+        - comment
+      summary: "Delete comment"
+      description: "End point Delete comment"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the comment to delete"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "Đã xóa comment thành công"
+        '404':
+          description: "Không tìm thấy comment"
+definitions:
+  CommentRequest:
+      type: object
+      required:
+        - content
+        - likeCount
+        - shareCount
+        - replyCount
+        - dislikeCount
+        - imgUrl
+        - blogPostId
+        - userId
+      properties:
+        content:
+          type: string
+        likeCount:
+          type: number
+        shareCount:
+          type: number
+        replyCount:
+          type: number
+        dislikeCount:
+          type: number
+        imgUrl:
+          type: string
+        blogPostId:
+          type: number
+        userId:
+          type: number
+  GetCommentRequest:
+      type: object
+      required:
+        - isAll
+        - pageSize
+        - pageNumber
+      properties:
+        isAll:
+          type: boolean
+        pageNumber:
+          type: number
+        pageSize:
+          type: number
+        content: 
+          type: string
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: Enter your bearer token in the format 'Bearer {token}'

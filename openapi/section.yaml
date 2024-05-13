@@ -1,0 +1,142 @@
+swagger: "3.0.3"
+info:
+  version: "1.0.0"
+  title: "API Documentation"
+  description: "This is a sample API documentation using Swagger"
+basePath: "/api"
+schemes:
+  - "http"
+paths:
+  /section/create:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Section
+      summary: "Create new Section"
+      description: "End point Create new Section"
+      parameters:
+        - name: "Section"
+          in: "body"
+          description: "Section object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/SectionRequest"
+      responses:
+        "200":
+          description: "Tạo mới thành công"
+        "409":
+
+          description: "Bài viết đã tồn tại trong hệ thống"
+
+        "400":
+          description: "Bad request, invalid input"
+
+  /section/update/{id}:
+    patch:
+      tags:
+        - Section
+      summary: "Update Section"
+      description: "End point update new Section"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Section object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/SectionRequest"
+        - name: "section update"
+          in: "body"
+          description: "Section object needs update"
+          required: true
+          schema:
+            $ref: "#/definitions/SectionRequest"
+      responses:
+        "200":
+          description: "Cập nhật thành công"
+        "400":
+          description: "Bad request, invalid input"
+
+  /section/:
+    get:
+      tags:
+        - Section
+      summary: "Get all Section"
+      description: "End point Get all Section"
+      parameters:
+        - name: "section"
+          description: "Get all Section"
+          required: true
+          schema:
+            $ref: "#/definitions/SectionRequest"
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/SectionRequest"
+        '400':
+          description: "Not found"
+
+  /section/{id}:
+    get:
+      tags:
+        - Section
+      summary: "Get Section by ID"
+      description: "End point Get Section by ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the Section to get"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/SectionRequest"
+        "404":
+          description: "Section not found"
+
+  /section/delete/{id}:
+    delete:
+      tags:
+        - Section
+      summary: "Delete Section"
+      description: "End point Delete Section"
+      parameters:
+        - name: "id"
+          in: "path"
+
+          description: "ID of the blog to delete"
+
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "Đã xóa thành công"
+        "404":
+          description: "Không tìm thấy"
+
+definitions:
+  SectionRequest:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: Enter your bearer token in the format 'Bearer {token}'

@@ -1,0 +1,49 @@
+version: '3.7'
+
+networks:
+  bookie:
+
+services:
+  mysql:
+    image: mysql:8.0
+    platform: linux/amd64
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    networks:
+      - bookie
+    ports:
+      - "3308:3306"
+
+  # redis:
+  #   image: redis/redis-stack-server:latest
+  #   ports:
+  #     - "6379:6379"
+  #   stdin_open: true
+  #   tty: true
+
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./:/app
+  #   environment:
+  #     NODE_ENV: development
+  #     DB_HOST: mysql
+  #     DB_USERNAME: ${DB_USERNAME}
+  #     DB_PASSWORD: ${DB_PASSWORD}
+  #     DB_DATABASE: ${DB_DATABASE}
+  #   depends_on:
+  #     - mysql
+  #   command: yarn dev
+  #   ports:
+  #     - "3310:3000"
+  #   networks:
+  #     - bookie
+volumes:
+  mysql:

@@ -1,0 +1,154 @@
+swagger: "3.0.3"
+info:
+  version: "1.0.0"
+  title: "API Documentation"
+  description: "This is a sample API documentation using Swagger"
+basePath: "/api"
+schemes:
+  - "http"
+paths:
+  /tags/create:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Tag
+      summary: "Create new Tag"
+      description: "End point Create new Tag"
+      parameters:
+        - name: "tag"
+          in: "body"
+          description: "Tag object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/TagRequest"
+      responses:
+        '200':
+          description: Tạo mới thành công
+        '409':
+
+          description: Danh mục đã tồn tại trong hệ thống
+
+        '400':
+          description: Bad request, invalid input
+  /tags/update/{id}:
+    patch:
+      tags:
+        - Tag
+      summary: "Update Tag"
+      description: "End point Create new Tag"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Tag object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/TagRequest"
+        - name: "Tag update"
+          in: "body"
+          description: "Tag object needs update"
+          required: true
+          schema:
+            $ref: "#/definitions/TagRequest"
+      responses:
+        '200':
+          description: Cập nhật thành công
+        '400':
+          description: Bad request, invalid input
+  /tags/:
+    get:
+      tags:
+        - Tag
+      summary: "Get all Tag"
+      description: "End point Get all Tag"
+      parameters:
+        - name: "tags"
+          description: "Get all tags"
+          required: true
+          schema:
+            $ref: "#/definitions/TagRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/TagRequest"
+        '400':
+          description: "Not found"
+
+  /tags/{id}:
+    get:
+      tags:
+        - Tag
+      summary: "Get Tag by ID"
+      description: "End point Get Tag by ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the Tag to get"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/TagRequest"
+        '404':
+          description: "Tag not found"
+  /tags/delete/{id}:
+    delete:
+      tags:
+        - Tag
+      summary: "Delete Tag"
+      description: "End point Delete Tag"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the Tag to delete"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "Đã xóa danh mục thành công"
+        '404':
+          description: "Không tìm thấy danh mục"
+
+  /tags/delete:
+    delete:
+      tags:
+        - Tag
+      summary: "Delete Tag"
+      description: "End point Delete Tag"
+      parameters:
+        - name: "[]"
+          in: "path"
+          description: "ID of the Tag to delete"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "Đã xóa danh mục thành công"
+        '404':
+          description: "Không tìm thấy danh mục"
+definitions:
+  TagRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: Enter your bearer token in the format 'Bearer {token}'

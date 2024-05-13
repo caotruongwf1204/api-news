@@ -1,0 +1,514 @@
+swagger: "3.0.3"
+info:
+  version: "1.0.0"
+  title: "API Documentation"
+  description: "This is a sample API documentation using Swagger"
+basePath: "/api"
+schemes:
+  - "http"
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: "Register a new user"
+      description: "Endpoint to register a new user."
+      parameters:
+        - name: "user"
+          in: "body"
+          description: "User object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/RegisterRequest"
+      responses:
+        "200":
+          description: Đăng ký thành công
+        "409":
+          description: Tải khoản đã tồn tại trong hệ thống
+        "400":
+          description: Bad request, invalid input
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: "Log in user"
+      description: "Endpoint to log in an existing user."
+      parameters:
+        - name: "user"
+          in: "body"
+          description: "User object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/LoginRequest"
+          examples:
+            example1:
+              value:
+                email: "admin@gmail.com"
+                password: "password"
+      responses:
+        "200":
+          description: Đăng nhập thành công
+        "401":
+          description: Sai mật khẩu
+        "404":
+          description: Tài khoản chưa đăng ký
+        "500":
+          description: Lỗi server
+  /auth/logout:
+    post:
+      tags:
+        - Auth
+      summary: "Logout user"
+      description: "Endpoint to log out an existing user."
+      parameters:
+        - name: "user log out"
+          description: "User log out"
+          required: true
+          schema:
+            $ref: "#/definitions/LoginRequest"
+      responses:
+        "200":
+          description: "Đăng xuất thành công"
+        "401":
+          description: "Chưa đăng nhập hoặc phiên làm việc hết hạn"
+  /auth/refresh-token:
+    post:
+      tags:
+        - Auth
+      summary: "refresh token"
+      description: "Endpoint to refresh token an existing user."
+      parameters:
+        - name: "refresh token"
+          in: "body"
+          description: "refresh token"
+          required: true
+          schema:
+            $ref: "#/definitions/RefreshTokenRequest"
+      responses:
+        "200":
+          description: "Trả về accessToken"
+        "401":
+          description: "Unauthorized"
+  /user/{id}:
+    get:
+      tags:
+        - User
+      summary: "Get user"
+      description: "Endpoint to log out an existing user."
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Get User"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "Lấy thông tin user thành công"
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/UserRequest"
+        "401":
+          description: "Chưa đăng nhập hoặc phiên làm việc hết hạn"
+        "404":
+          description: "User not found"
+    patch:
+      tags:
+        - User
+      summary: "Update User"
+      description: "End point Create new User"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "User object that needs to be update"
+          required: true
+          schema:
+            $ref: "#/definitions/UserRequest"
+        - name: "User update"
+          in: "body"
+          description: "User object needs update"
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateUserRequest"
+      responses:
+        '200':
+          description: Cập nhật thành công
+        '400':
+          description: Bad request, invalid input
+
+    delete:
+      tags:
+        - User
+      summary: Xoá user"
+      description: "Endpoint to delete an existing user."
+      parameters:
+        - name: id
+          in: path
+          description: "ID of the user to delete"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: "User đã được xoá thành công"
+        "401":
+          description: "Không có quyền xoá người dùng"
+        "404":
+          description: "User not found."
+  /user/:
+    post:
+      tags:
+        - User
+      summary: "Post user"
+      description: "Endpoint to log out an existing user."
+      parameters:
+        - name: "Post User"
+          in: "body"
+          description: "Post User"
+          required: true
+          schema:
+            $ref: "#/definitions/UserRequest"
+      responses:
+        "200":
+          description: "Tạo mới user thành công"
+        "401":
+          description: "Không có quyền tạo người dùng mới"
+  /user/get-users:  
+    post:
+      tags:
+        - User
+      summary: "Get all User"
+      description: "End point Get all User"
+      parameters:
+        - name: "Get All User"
+          in: "body"
+          description: "Get all User"
+          required: true
+          schema:
+            $ref: "#/definitions/GetUserRequest"
+
+      responses:
+        '200':
+          description: "Get All User Success"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/UserRequest"
+        '401': 
+          description: "Không có quyền get all user"
+        '400':
+          description: "not found"
+  /user/create-role/{id}:  
+    post:
+      tags:
+        - User
+      summary: "thêm role mới cho User"
+      description: "End point role user"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Get User"
+          required: true
+          schema:
+            type: "string"
+        - name: "thêm role mới cho User"
+          in: "body"
+          description: "thêm role mới cho User"
+          required: true
+          schema:
+            $ref: "#/definitions/RoleUserRequest"
+      responses:
+        '200':
+          description: "thêm role mới cho User thành công"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/UserRequest"
+        '401': 
+          description: "Không có quyền thêm mới role user"
+        '400':
+          description: "not found"
+  /auth/roles:  
+    post:
+      tags:
+        - Role
+      summary: "thêm role mới"
+      description: "End point role"
+      parameters:
+        - name: "thêm role mới"
+          in: "body"
+          description: "thêm role mới"
+          required: true
+          schema:
+            $ref: "#/definitions/RoleRequest"
+      responses:
+        '200':
+          description: "thêm role mới thành công"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/RoleRequest"
+        '401': 
+          description: "Không có quyền thêm mới role"
+        '400':
+          description: "not found"
+    get:
+      tags:
+        - Role
+      summary: "role user"
+      description: "Endpoint role."
+      parameters:
+        - name: "Role User"
+          # in: "body"
+          description: "Role User"
+          required: fasle
+          schema:
+            $ref: "#/definitions/RoleRequest"
+      responses:
+        "200":
+          description: "get all role thành công"
+        "401":
+          description: "Không có quyền get all role"
+  /auth/roles/{id}:  
+    patch:
+      tags:
+        - Role
+      summary: "update role"
+      description: "End point role"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "update role"
+          required: true
+          schema:
+            type: "string"
+        - name: "update role"
+          in: "body"
+          description: "update role"
+          required: true
+          schema:
+            $ref: "#/definitions/RoleRequest"
+      responses:
+        '200':
+          description: "update role thành công"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/RoleRequest"
+        '401': 
+          description: "Không có quyền update role"
+        '400':
+          description: "not found"
+    delete:
+      tags:
+        - Role
+      summary: "delete role"
+      description: "End point role"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "delete role"
+          required: true
+          schema:
+            type: "string"
+        - name: "delete role"
+          in: "body"
+          description: "delete role"
+          required: true
+          schema:
+            $ref: "#/definitions/RoleRequest"
+      responses:
+        '200':
+          description: "delete role thành công"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/RoleRequest"
+        '401': 
+          description: "Không có quyền delete role"
+        '400':
+          description: "not found"
+  /auth/permissions:  
+    get:
+      tags:
+        - Permissions
+      summary: "get all permissions"
+      description: "End point permissions"
+      parameters:
+        - name: "get all permissions"
+          # in: "body"
+          description: "get all permissions"
+          required: true
+          schema:
+            $ref: "#/definitions/PermissionsRequest"
+      responses:
+        '200':
+          description: "get all permissions thành công"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/PermissionsRequest"
+        '401': 
+          description: "Không có quyền get all Permissions"
+        '400':
+          description: "not found"
+  /auth/role-permissions:  
+    post:
+      tags:
+        - Permissions
+      summary: "set role permissions"
+      description: "End point permissions"
+      parameters:
+        - name: "set role permissions"
+          in: "body"
+          description: "set role permissions"
+          required: true
+          schema:
+            $ref: "#/definitions/PermissionsRequest"
+      responses:
+        '200':
+          description: "set role permissions thành công"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/PermissionsRequest"
+        '401': 
+          description: "Không có quyền set role Permissions"
+        '400':
+          description: "not found"
+    
+definitions:
+  RegisterRequest:
+    type: object
+    required:
+      - username
+      - email
+      - password
+    properties:
+      username:
+        type: string
+      email:
+        type: string
+        format: email
+      password:
+        type: string
+        format: password
+  LoginRequest:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+        format: email
+      password:
+        type: string
+        format: password
+  UserRequest:
+    type: object
+    required:
+      - username
+      - email
+      - password
+      - imgUrl
+    properties:
+      username:
+        type: string
+      email:
+        type: string
+        format: email
+      password:
+        type: string
+        format: password
+      imgUrl:
+        type: string
+  RefreshTokenRequest:
+    type: object
+    required:
+      - refreshToken
+    properties:
+      refreshToken:
+        type: string 
+  GetUserRequest:
+      type: object
+      required:
+        - isAll
+        - pageSize
+        - pageNumber
+      properties:
+        isAll:
+          type: boolean
+        pageNumber:
+          type: number
+        pageSize:
+          type: number
+        usermane:
+          type: string 
+  RoleUserRequest:
+      type: object
+      required:
+        - rolesId
+        - usersId
+      properties:
+        rolesId:
+          type: number
+        usersId:
+          type: number
+  UpdateUserRequest:
+      type: object
+      required:
+        - username
+        - email
+        - oldPassword
+        - password
+        - imgUrl
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        oldPassword:
+          type: string
+          format: password
+        password:
+          type: string
+          format: password
+        imgUrl:
+          type: string
+  RoleRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+  PermissionsRequest:
+      type: object
+      required:
+        - permissions
+        - roleId
+      properties:
+        roleId:
+          type: number
+        permissions:
+          type: array
+          items:
+            type: string
+     

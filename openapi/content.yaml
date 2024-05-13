@@ -1,0 +1,133 @@
+swagger: "3.0.3"
+info:
+  version: "1.0.0"
+  title: "API Documentation"
+  description: "This is a sample API documentation using Swagger"
+basePath: "/api"
+schemes:
+  - "http"
+paths:
+  /content/create:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - content
+      summary: "Create new content"
+      description: "End point Create new content"
+      parameters:
+        - name: "content"
+          in: "body"
+          description: "Content object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/ContentRequest"
+      responses:
+        '200':
+          description: Tạo mới thành công
+        '409':
+          description: Đã tồn tại trong hệ thống
+        '400':
+          description: Bad request, invalid input
+  /content/update/{id}:
+    patch:
+      tags:
+        - content
+      summary: "Update content"
+      description: "End point Create new content"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Content object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/ContentRequest"
+        - name: "content update"
+          in: "body"
+          description: "Content object needs update"
+          required: true
+          schema:
+            $ref: "#/definitions/ContentRequest"
+      responses:
+        '200':
+          description: Cập nhật thành công
+        '400':
+          description: Bad request, invalid input
+  /content/:
+    get:
+      tags:
+        - content
+      summary: "Get all content"
+      description: "End point Get all content"
+      parameters:
+        - name: "content"
+          description: "Get all content"
+          required: true
+          schema:
+            $ref: "#/definitions/ContentRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/ContentRequest"
+        '400':
+          description: "Not found"
+
+  /content/{id}:
+    get:
+      tags:
+        - content
+      summary: "Get content by ID"
+      description: "End point Get content by ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the content to get"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/ContentRequest"
+        '404':
+          description: "Content not found"
+  /content/delete/{id}:
+    delete:
+      tags:
+        - content
+      summary: "Delete content"
+      description: "End point Delete content"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the content to delete"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "Đã xóa danh mục thành công"
+        '404':
+          description: "Không tìm thấy danh mục"
+definitions:
+  ContentRequest:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: string
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: Enter your bearer token in the format 'Bearer {token}'
